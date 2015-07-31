@@ -23,6 +23,9 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     var pin : VirtualTouristPin!
     var cache = Cache()
     
+    var allPhotosLoaded = true
+    var noPhotosLoaded = true
+    
     lazy var fetchedResultsController : NSFetchedResultsController = {
       
         let fetchRequest = NSFetchRequest(entityName: "Photo")
@@ -72,18 +75,9 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         super.viewWillAppear(animated)
         
         addNotifications()
-        
-        var allPhotosLoaded = true
-        var noPhotosLoaded = true
         newCollectionButton.title = "Loading"
+        checkIfImagesLoaded()
         
-        for image in pin.images {
-            if image.status != .Done {
-                allPhotosLoaded = false
-            } else {
-                noPhotosLoaded = false
-            }
-        }
         if noPhotosLoaded {
             dispatch_async(dispatch_get_main_queue()) {
                 self.newCollectionButton.title = "No Photos Found"
@@ -94,6 +88,16 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
             dispatch_async(dispatch_get_main_queue()) {
                 self.newCollectionButton.title = "New Collection"
                 self.newCollectionButton.enabled = true
+            }
+        }
+    }
+    
+    func checkIfImagesLoaded() {
+        for image in pin.images {
+            if image.status != .Done {
+                allPhotosLoaded = false
+            } else {
+                noPhotosLoaded = false
             }
         }
     }
