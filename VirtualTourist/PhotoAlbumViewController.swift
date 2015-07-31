@@ -253,11 +253,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
                 return
         }
     }
-
-    
-    
-    
-
     
     func zoomIntoPinRegionOnStaticMapView(pin : VirtualTouristPin) {
         var span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)

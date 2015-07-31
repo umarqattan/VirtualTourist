@@ -195,6 +195,7 @@ class TravelLocationsMapViewController : UIViewController, MKMapViewDelegate, UI
             let dictionary = ["latitude": coordinate.latitude, "longitude": coordinate.longitude]
             let pin = VirtualTouristPin(dictionary: dictionary, context: sharedContext)
             CoreDataStackManager.sharedInstance().saveContext()
+            
             mapView.addAnnotation(pin)
             pin.getPhotos() { success in
                 println("Downloaded")
@@ -210,7 +211,6 @@ class TravelLocationsMapViewController : UIViewController, MKMapViewDelegate, UI
         mapView.addGestureRecognizer(longPressGestureRecognizerToAdd)
     }
 
-    
     /**
         MARK: MKMapViewDelegate methods
     **/
@@ -287,6 +287,21 @@ class TravelLocationsMapViewController : UIViewController, MKMapViewDelegate, UI
         saveMapRegion(mapView.region)
     }
 
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+        let reuseID = "VirtualTouristPin"
+        var reusedAnnotation = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseID) as? MKPinAnnotationView
+        if (reusedAnnotation?.annotation.isKindOfClass(VirtualTouristPin) != nil) {
+            reusedAnnotation?.animatesDrop = true
+            reusedAnnotation?.canShowCallout = false
+        } else {
+            reusedAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
+            reusedAnnotation?.animatesDrop = true
+            reusedAnnotation?.canShowCallout = false
+        }
+        return reusedAnnotation
+        
+    }
+    
     var filePath : String {
         let urlPath = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
         return urlPath.URLByAppendingPathComponent("saveTheMap").path!
