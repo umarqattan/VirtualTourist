@@ -12,24 +12,24 @@
 	<dict>
 		<key>3377A14AABFB8BF84B72EA683354A7C77EB9323C</key>
 		<string>https://github.com/umarqattan/MemeMe.git</string>
-		<key>A65BCAA9B7A77500BBF95593800C3F1B9D215F5E</key>
-		<string>https://github.com/dongri/OAuthSwift.git</string>
+		<key>5E6EE38A6C67F0545C8D4DE66FA387D3F00A030F</key>
+		<string>https://github.com/umarqattan/VirtualTourist.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>VirtualTourist/VirtualTourist.xcodeproj</string>
+	<string>VirtualTourist.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>3377A14AABFB8BF84B72EA683354A7C77EB9323C</key>
 		<string>../../..</string>
-		<key>A65BCAA9B7A77500BBF95593800C3F1B9D215F5E</key>
-		<string>../../../OAuthSwift</string>
+		<key>5E6EE38A6C67F0545C8D4DE66FA387D3F00A030F</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/umarqattan/MemeMe.git</string>
+	<string>https://github.com/umarqattan/VirtualTourist.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>3377A14AABFB8BF84B72EA683354A7C77EB9323C</string>
+	<string>5E6EE38A6C67F0545C8D4DE66FA387D3F00A030F</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -38,15 +38,15 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>3377A14AABFB8BF84B72EA683354A7C77EB9323C</string>
 			<key>IDESourceControlWCCName</key>
-			<string>iOS%20Apps</string>
+			<string></string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>A65BCAA9B7A77500BBF95593800C3F1B9D215F5E</string>
+			<string>5E6EE38A6C67F0545C8D4DE66FA387D3F00A030F</string>
 			<key>IDESourceControlWCCName</key>
-			<string>OAuthSwift</string>
+			<string>VirtualTourist</string>
 		</dict>
 	</array>
 </dict>
