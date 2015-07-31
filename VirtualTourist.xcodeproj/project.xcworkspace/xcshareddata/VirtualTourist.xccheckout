@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>18ACB191-8261-4B5A-93DC-2EA5DF32AD1E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>VirtualTourist</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>3377A14AABFB8BF84B72EA683354A7C77EB9323C</key>
+		<string>https://github.com/umarqattan/MemeMe.git</string>
+		<key>A65BCAA9B7A77500BBF95593800C3F1B9D215F5E</key>
+		<string>https://github.com/dongri/OAuthSwift.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>VirtualTourist/VirtualTourist.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>3377A14AABFB8BF84B72EA683354A7C77EB9323C</key>
+		<string>../../..</string>
+		<key>A65BCAA9B7A77500BBF95593800C3F1B9D215F5E</key>
+		<string>../../../OAuthSwift</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/umarqattan/MemeMe.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>3377A14AABFB8BF84B72EA683354A7C77EB9323C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3377A14AABFB8BF84B72EA683354A7C77EB9323C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iOS%20Apps</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>A65BCAA9B7A77500BBF95593800C3F1B9D215F5E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OAuthSwift</string>
+		</dict>
+	</array>
+</dict>
+</plist>
