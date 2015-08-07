@@ -206,18 +206,15 @@ class TravelLocationsMapViewController : UIViewController, MKMapViewDelegate, UI
     
     func gestureRecognizerTo() {
         longPressGestureRecognizerToAdd = UILongPressGestureRecognizer(target: self, action: Selector("dropAPin:"))
-        longPressGestureRecognizerToAdd.minimumPressDuration = 0.8
+        longPressGestureRecognizerToAdd.minimumPressDuration = 0.5
         longPressGestureRecognizerToAdd.delegate = self
         mapView.addGestureRecognizer(longPressGestureRecognizerToAdd)
     }
 
     /**
         MARK: MKMapViewDelegate methods
-    **/
     
     
-    
-    /**
         MARK: method that lets the delegate know when a pin has been
               selected. If the tourButton's title is "Tap a Pin!",
               then it enables the user to tap a pin to see the Flickr
@@ -291,13 +288,12 @@ class TravelLocationsMapViewController : UIViewController, MKMapViewDelegate, UI
         let reuseID = "VirtualTouristPin"
         var reusedAnnotation = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseID) as? MKPinAnnotationView
         if (reusedAnnotation?.annotation.isKindOfClass(VirtualTouristPin) != nil) {
-            reusedAnnotation?.animatesDrop = true
-            reusedAnnotation?.canShowCallout = false
+            
         } else {
             reusedAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
-            reusedAnnotation?.animatesDrop = true
-            reusedAnnotation?.canShowCallout = false
         }
+        reusedAnnotation?.animatesDrop = true
+        reusedAnnotation?.canShowCallout = false
         return reusedAnnotation
         
     }

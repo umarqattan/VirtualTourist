@@ -54,32 +54,31 @@ class VirtualTouristPin : NSManagedObject, MKAnnotation {
     }
 
     func getPhotos(reload: Bool = false, completionHandler: (pages: Int) -> Void) -> Void {
-        if !reload {
-            getImagesForPinFromFlickr() { pageCount in
-                completionHandler(pages: pageCount)
-                if pageCount > 0 {
-                    var idlePhotos = self.images.count
-                    for image in self.images {
-                        image.status = .Loading
-                        let task = Cache.sharedInstance().downloadImage(image.urlPath) { imageData, error in
-                            idlePhotos--
-                            if imageData == nil {
-                                return
-                            } else {
-                                let anImage = UIImage(data: imageData!)
-                                image.saveImage(anImage!)
-                                if idlePhotos == 0 {
-                                    println("idlePhotos = \(idlePhotos)")
-                                    let notification = NSNotification(name: Flickr.Notifications.PhotosLoadedForPin, object: nil)
-                                    NSNotificationCenter.defaultCenter().postNotification(notification)
-                                }
+        if reload {
+            page++
+        }
+        getImagesForPinFromFlickr() { pageCount in
+            completionHandler(pages: pageCount)
+            if pageCount > 0 {
+                var idlePhotos = self.images.count
+                for image in self.images {
+                    image.status = .Loading
+                    let task = Cache.sharedInstance().downloadImage(image.urlPath) { imageData, error in
+                        idlePhotos--
+                        if imageData == nil {
+                            return
+                        } else {
+                            let anImage = UIImage(data: imageData!)
+                            image.saveImage(anImage!)
+                            if idlePhotos == 0 {
+                                println("idlePhotos = \(idlePhotos)")
+                                let notification = NSNotification(name: Flickr.Notifications.PhotosLoadedForPin, object: nil)
+                                NSNotificationCenter.defaultCenter().postNotification(notification)
                             }
                         }
                     }
                 }
             }
-        } else {
-            page++
         }
     }
     

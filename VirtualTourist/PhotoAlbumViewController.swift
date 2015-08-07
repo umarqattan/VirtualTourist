@@ -21,7 +21,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     @IBOutlet weak var flickrCollectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     var pin : VirtualTouristPin!
-    var cache = Cache()
     
     var allPhotosLoaded = true
     var noPhotosLoaded = true
@@ -75,7 +74,10 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         super.viewWillAppear(animated)
         
         addNotifications()
-        newCollectionButton.title = "Loading"
+        newCollectionButton.enabled = false
+        dispatch_async(dispatch_get_main_queue()) {
+            self.newCollectionButton.title = "Loading..."
+        }
         checkIfImagesLoaded()
         
         if noPhotosLoaded {
@@ -83,8 +85,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
                 self.newCollectionButton.title = "No Photos Found"
                 self.newCollectionButton.enabled = false
             }
-        }
-        if allPhotosLoaded {
+        } else if allPhotosLoaded {
             dispatch_async(dispatch_get_main_queue()) {
                 self.newCollectionButton.title = "New Collection"
                 self.newCollectionButton.enabled = true
@@ -121,11 +122,11 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
             if pages > 0 {
                 println("There are \(pages) pages")
                 self.fetch()
+            } else if self.pin.page > 1 {
                 println("Getting more images")
                 CoreDataStackManager.sharedInstance().saveContext()
                 dispatch_async(dispatch_get_main_queue()) {
                     self.flickrCollectionView.reloadData()
-                    self.newCollection(sender)
                 }
             } else {
                 println("Could not get photos")
@@ -200,10 +201,10 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("FlickrCollectionViewCell", forIndexPath: indexPath) as! FlickrCollectionViewCell
         
         let photo = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-        cell.flickrImageView.image = UIImage(named: "Error-32")
+        cell.flickrImageView.image = UIImage(named: "Picture-100")
         cell.activityIndicator.startAnimating()
         
-        if let image = cache.imageForIdentifier(photo.filePath) {
+        if let image = Cache.sharedInstance().imageForIdentifier(photo.filePath) {
             cell.activityIndicator.stopAnimating()
             cell.flickrImageView.image = image
         } else if photo.status == .Idle {
@@ -214,7 +215,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     }
     
     func configureCell(cell: FlickrCollectionViewCell, photo: Photo) {
-        let task = cache.downloadImage(photo.filePath) { imageData, error in
+        let task = Cache.sharedInstance().downloadImage(photo.filePath) { imageData, error in
             if imageData != nil {
                 let image = UIImage(data: imageData!)
                 photo.saveImage(image!)
@@ -252,7 +253,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
             case .Delete :
                 flickrCollectionView.deleteItemsAtIndexPaths([indexPath!])
             case .Insert :
-                return
+                let photo = anObject as! Photo
             default :
                 return
         }

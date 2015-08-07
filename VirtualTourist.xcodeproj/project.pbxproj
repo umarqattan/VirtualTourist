@@ -131,13 +131,13 @@
 		E18EB5BA1B5C93B6001D4473 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E18EB5921B58AD5A001D4473 /* AppDelegate.swift */,
 				E18EB66B1B658CA4001D4473 /* CoreDataStackManager.swift */,
 				E18EB5B81B5AB776001D4473 /* VirtualTouristPin.swift */,
 				E18EB6671B633221001D4473 /* Photo.swift */,
 				E18EB5C11B5DD135001D4473 /* Flickr.swift */,
-				E18EB5921B58AD5A001D4473 /* AppDelegate.swift */,
-				E18EB6641B632B6B001D4473 /* VirtualTourist.xcdatamodeld */,
 				E18EB6691B648562001D4473 /* Cache.swift */,
+				E18EB6641B632B6B001D4473 /* VirtualTourist.xcdatamodeld */,
 			);
 			name = Model;
 			sourceTree = "<group>";

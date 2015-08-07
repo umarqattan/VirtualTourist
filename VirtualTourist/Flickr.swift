@@ -52,46 +52,31 @@ class Flickr : NSObject {
     class func buildURLWith(coordinate : CLLocationCoordinate2D, radius : Int, photosPerPage : Int, and page: Int) -> String {
         var urlComponents = [
             Flickr.url,
-            "{api_key}",
-            "{format}",
-            "{nojsoncallback}",
-            "{latitude}",
-            "{longitude}",
-            "{radius}",
-            "{per_page}",
-            "{page}"
+            "api_key=\(Flickr.KEY)",
+            "format=\(Flickr.Methods.Parameters.DATA_FORMAT)",
+            "nojsoncallback=\(Flickr.Methods.Parameters.NO_JSON_CALLBACK)",
+            "lat=\(coordinate.latitude)",
+            "lon=\(coordinate.longitude)",
+            "radius=\(radius)",
+            "per_page=\(photosPerPage)",
+            "page=\(page)"
         ]
-        urlComponents[1] = "api_key=\(Flickr.KEY)"
-        urlComponents[2] = "format=\(Flickr.Methods.Parameters.DATA_FORMAT)"
-        urlComponents[3] = "nojsoncallback=\(Flickr.Methods.Parameters.NO_JSON_CALLBACK)"
-        urlComponents[4] = "lat=\(coordinate.latitude)"
-        urlComponents[5] = "lon=\(coordinate.longitude)"
-        urlComponents[6] = "radius=\(radius)"
-        urlComponents[7] = "per_page=\(photosPerPage)"
-        urlComponents[8] = "page=\(page)"
-        let urlString = "&".join(urlComponents)
-        println("urlStiring = \(urlString)\n")
-        return urlString
+        return "&".join(urlComponents)
     }
     
     class func buildImageURLWith(photo : [String : AnyObject]) -> String {
         var imageURLComponents = [
             "https://farm",
-            "{farm-id}",
+            String(photo["farm"] as! Int),
             ".staticflickr.com/",
-            "{server-id}",
+            photo["server"] as! String,
             "/",
-            "{id}",
+            photo["id"] as! String,
             "_",
-            "{secret}",
+            photo["secret"] as! String,
             "_z.jpg"]
-        imageURLComponents[1] = String(photo["farm"] as! Int)
-        imageURLComponents[3] = photo["server"] as! String
-        imageURLComponents[5] = photo["id"] as! String
-        imageURLComponents[7] = photo["secret"] as! String
-        let imageURLString = "".join(imageURLComponents)
-        println("imageURLStiring = \(imageURLString)\n")
-        return imageURLString
+        
+        return "".join(imageURLComponents)
     }
 
     

@@ -12,8 +12,6 @@ import UIKit
 
 class Cache {
     
-    var cache = NSCache()
-    
     func downloadImage(imageURL: String, completionHandler: (imageData: NSData?, error: NSError?) ->  Void) -> NSURLSessionTask {
         
         let request = NSURLRequest(URL: NSURL(string: imageURL)!)
@@ -34,17 +32,14 @@ class Cache {
         
         if (identifier == nil) || (identifier!.isEmpty) {
             return nil
+        }
+        let path = formatPathForIdentifier(identifier!)
+        var imageData : NSData?
+        
+        if let image = NSData(contentsOfFile: path) {
+            return UIImage(data: image)
         } else {
-            let path = formatPathForIdentifier(identifier!)
-            var imageData : NSData?
-            
-            if let image = cache.objectForKey(path) as? UIImage {
-                return image
-            } else if let imageData = NSData(contentsOfFile: path) {
-                return UIImage(data: imageData)
-            } else {
-                return nil
-            }
+            return nil
         }
     }
     
@@ -52,33 +47,21 @@ class Cache {
         let filePath = formatPathForIdentifier(identifier)
         
         if image == nil {
-            cache.removeObjectForKey(filePath)
             NSFileManager.defaultManager().removeItemAtPath(filePath, error: nil)
             return
-        } else {
-            cache.setObject(image!, forKey: filePath)
-            let imageData = UIImagePNGRepresentation(image!)
-            imageData.writeToFile(filePath, atomically: true)
         }
+        let imageData = UIImagePNGRepresentation(image!)
+        imageData.writeToFile(filePath, atomically: true)
     }
     
+    /**
+        MARK: Delete the image by storing nil where the image
+              was originally found.
+    **/
     func deleteImage(identifier : String) {
-        let filePath = formatPathForIdentifier(identifier)
-        
-        cache.removeObjectForKey(filePath)
-        var error : NSError? = nil
-        if NSFileManager.defaultManager().fileExistsAtPath(filePath) {
-            NSFileManager.defaultManager().removeItemAtPath(filePath, error: &error)
-            
-            if let error = error {
-                println("Could not remove item at path: \(filePath)")
-            }
-        }
-    }
-    
-    func deleteImageFromStore(identifier : String) {
         saveImage(nil, identifier: identifier)
     }
+    
     
     func formatPathForIdentifier(identifer : String) -> String {
         let documentDirectory = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
