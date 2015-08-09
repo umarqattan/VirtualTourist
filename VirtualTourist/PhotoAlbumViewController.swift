@@ -244,6 +244,28 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         }
     }
     
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+        
+        if annotation is MKUserLocation {
+            //return nil so map view draws "blue dot" for standard user location
+            return nil
+        }
+        
+        let reuseId = "VirtualTouristPin"
+        
+        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = false
+            pinView!.pinColor = MKPinAnnotationColor.Purple
+        }
+        else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
+    }
+    
     func zoomIntoPinRegionOnStaticMapView(pin : VirtualTouristPin) {
         var span = MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)
         var region = MKCoordinateRegion(center: pin.coordinate, span: span)
