@@ -72,7 +72,7 @@ class VirtualTouristPin : NSManagedObject, MKAnnotation {
                             image.saveImage(anImage!)
                             if idlePhotos == 0 {
                                 println("idlePhotos = \(idlePhotos)")
-                                let notification = NSNotification(name: Flickr.Notifications.PhotosLoadedForPin, object: nil)
+                                let notification = NSNotification(name: Flickr.Notifications.PhotosLoadedForPin, object: self)
                                 NSNotificationCenter.defaultCenter().postNotification(notification)
                             }
                         }
