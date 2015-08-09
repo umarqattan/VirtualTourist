@@ -284,18 +284,36 @@ class TravelLocationsMapViewController : UIViewController, MKMapViewDelegate, UI
         saveMapRegion(mapView.region)
     }
 
+    /**
+        MARK: PROBLEM:  I needed to find a way to animate the drop of a pin
+                        onto the mapView, but every time I would remove the
+                        pin, I would run into an error. The error said that
+                        the mapView delegate could not find an MKPinAnnotation-
+                        View to reuse.
+              SOLUTION: http://stackoverflow.com/questions/24523702/stuck-on-using-mkpinannotationview-within-swift-and-mapkit
+    **/
+
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
-        let reuseID = "VirtualTouristPin"
-        var reusedAnnotation = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseID) as? MKPinAnnotationView
-        if (reusedAnnotation?.annotation.isKindOfClass(VirtualTouristPin) != nil) {
             
-        } else {
-            reusedAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
-        }
-        reusedAnnotation?.animatesDrop = true
-        reusedAnnotation?.canShowCallout = false
-        return reusedAnnotation
-        
+            if annotation is MKUserLocation {
+                //return nil so map view draws "blue dot" for standard user location
+                return nil
+            }
+            
+            let reuseId = "VirtualTouristPin"
+            
+            var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+            if pinView == nil {
+                pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+                pinView!.canShowCallout = false
+                pinView!.animatesDrop = true
+                pinView!.pinColor = MKPinAnnotationColor.Purple
+            }
+            else {
+                pinView!.annotation = annotation
+            }
+            
+            return pinView
     }
     
     var filePath : String {
