@@ -355,5 +355,3 @@ class TravelLocationsMapViewController : UIViewController, MKMapViewDelegate, UI
     }
 
 }
-    
-    
