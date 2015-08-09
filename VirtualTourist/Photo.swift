@@ -26,7 +26,6 @@ class Photo : NSManagedObject {
     @NSManaged var filePath : String
     @NSManaged var urlPath : String
     var status: Flickr.Download.Status = .Idle
-    var error : NSErrorPointer = NSErrorPointer()
     
     lazy var sharedContext : NSManagedObjectContext = {
         return CoreDataStackManager.sharedInstance().managedObjectContext!
@@ -50,8 +49,10 @@ class Photo : NSManagedObject {
     
     func deleteImage() {
         Cache.sharedInstance().deleteImage(filePath)
-        sharedContext.deleteObject(self)
-        sharedContext.save(error)
+        managedObjectContext?.deleteObject(self)
+        
+        var error : NSErrorPointer = NSErrorPointer()
+        managedObjectContext?.save(error)
         if error != nil {
             println("Could not delete the photo for path \(filePath) due to \(error)")
         }
@@ -66,7 +67,7 @@ class Photo : NSManagedObject {
         Cache.sharedInstance().saveImage(image, identifier: filePath)
         status = .Done
         println("image \(image) saved!")
-        let notification = NSNotification(name: Flickr.Notifications.PhotoLoaded, object: nil)
+        let notification = NSNotification(name: Flickr.Notifications.PhotoLoaded, object: self)
         NSNotificationCenter.defaultCenter().postNotification(notification)
     }
     
