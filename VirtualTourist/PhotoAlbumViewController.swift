@@ -11,9 +11,6 @@ import UIKit
 import CoreData
 import MapKit
 
-let NEW_COLLECTION = "New Collection"
-let REMOVE_SELECTED_PICTURES = "Remove Selected Pictures"
-
 class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, MKMapViewDelegate, NSFetchedResultsControllerDelegate, UICollectionViewDelegateFlowLayout {
 
     
@@ -21,6 +18,9 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     @IBOutlet weak var flickrCollectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     var pin : VirtualTouristPin!
+    
+    var allPhotosLoaded = false
+    var noPhotosLoaded = true
     
     lazy var fetchedResultsController : NSFetchedResultsController = {
       
@@ -68,16 +68,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
             self.newCollectionButton.title = "Loading..."
         }
         
-        var allPhotosLoaded = true
-        var noPhotosLoaded = true
-        for image in pin.images {
-            if image.status != .Done {
-                allPhotosLoaded = false
-            } else {
-                noPhotosLoaded = false
-            }
-        }
-        
         if noPhotosLoaded {
             dispatch_async(dispatch_get_main_queue()) {
                 self.newCollectionButton.title = "No Photos Found"
@@ -99,6 +89,8 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     
     @IBAction func newCollection(sender: AnyObject) {
         newCollectionButton.enabled = false
+        self.allPhotosLoaded = false
+        self.noPhotosLoaded = true
         println("Pressed New Collection")
         pin.deletePhotos()
         pin.getPhotos(reload: true) { pages in
@@ -113,9 +105,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
                 println("Getting more images")
                 self.pin.page = 0
                 CoreDataStackManager.sharedInstance().saveContext()
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.flickrCollectionView.reloadData()
-                }
             } else {
                 println("Could not get photos")
             }
@@ -127,7 +116,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
                   individually loaded images where the download st-
                   atus of the image was Flickr.Download.Status.Done.
                   The problem was with the Notification name.
-        SOLUTION: Simply fix the name. It caused me hours of pain,
+        SOLUTION: Simply change the name. It caused me hours of pain,
                   unfortunately. 
     **/
     
@@ -139,17 +128,17 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "photoFinishedLoading:" as Selector,
-            name: Flickr.Notifications.PhotoLoadedForPin,
+            name: Flickr.Notifications.PhotoLoaded,
             object: nil)
     }
     
     func removeNotifications() {
         NSNotificationCenter.defaultCenter().removeObserver(self,
             name: Flickr.Notifications.PhotoLoaded,
-            object: pin)
+            object: nil)
         NSNotificationCenter.defaultCenter().removeObserver(self,
             name: Flickr.Notifications.PhotosLoadedForPin,
-            object: nil)
+            object: pin)
     }
     
     /**
@@ -159,10 +148,11 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     **/
     
     func photosFinishedLoading(notification : NSNotification) {
+        
         dispatch_async(dispatch_get_main_queue()) {
             self.newCollectionButton.title = "New Collection"
+            self.allPhotosLoaded = true
             self.newCollectionButton.enabled = true
-            println("PhotosFinishedLoading")
         }
     }
     
@@ -173,9 +163,15 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
               and its activityIndicator stops animating.
     **/
     func photoFinishedLoading(photo: Photo) {
+        
         dispatch_async(dispatch_get_main_queue()) {
             self.flickrCollectionView.reloadData()
-            println("PhotoFinishedLoading")
+            self.noPhotosLoaded = false
+            if self.allPhotosLoaded {
+                self.newCollectionButton.title = "New Collection"
+            } else {
+                self.newCollectionButton.title = "Loading..."
+            }
         }
     }
     
