@@ -22,9 +22,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     var pin : VirtualTouristPin!
     
-    var allPhotosLoaded = true
-    var noPhotosLoaded = true
-    
     lazy var fetchedResultsController : NSFetchedResultsController = {
       
         let fetchRequest = NSFetchRequest(entityName: "Photo")
@@ -35,9 +32,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     }()
     
     lazy var sharedContext : NSManagedObjectContext = {
-    
         return CoreDataStackManager.sharedInstance().managedObjectContext!
-    
     }()
     
     func fetch() {
@@ -46,19 +41,13 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         if error != nil {
             println("Could not perform fetch due to \(error)")
         }
-        dispatch_async(dispatch_get_main_queue()) {
-            self.flickrCollectionView.reloadData()
-        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var error : NSError? = nil
         fetchedResultsController.delegate = self
-        fetchedResultsController.performFetch(&error)
         fetch()
-        
         
         setDelegates()
         zoomIntoPinRegionOnStaticMapView(pin)
@@ -78,7 +67,16 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         dispatch_async(dispatch_get_main_queue()) {
             self.newCollectionButton.title = "Loading..."
         }
-        checkIfImagesLoaded()
+        
+        var allPhotosLoaded = true
+        var noPhotosLoaded = true
+        for image in pin.images {
+            if image.status != .Done {
+                allPhotosLoaded = false
+            } else {
+                noPhotosLoaded = false
+            }
+        }
         
         if noPhotosLoaded {
             dispatch_async(dispatch_get_main_queue()) {
@@ -93,16 +91,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         }
     }
     
-    func checkIfImagesLoaded() {
-        for image in pin.images {
-            if image.status != .Done {
-                allPhotosLoaded = false
-            } else {
-                noPhotosLoaded = false
-            }
-        }
-    }
-    
     /**
         MARK: when the user taps "New Collection" button on
               the UIToolbar, the Photo class grabs a new set of
@@ -111,7 +99,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     
     @IBAction func newCollection(sender: AnyObject) {
         newCollectionButton.enabled = false
-        newCollectionButton.title = "New Collection"
         println("Pressed New Collection")
         pin.deletePhotos()
         pin.getPhotos(reload: true) { pages in
@@ -124,6 +111,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
                 self.fetch()
             } else if self.pin.page > 1 {
                 println("Getting more images")
+                self.pin.page = 0
                 CoreDataStackManager.sharedInstance().saveContext()
                 dispatch_async(dispatch_get_main_queue()) {
                     self.flickrCollectionView.reloadData()
@@ -138,7 +126,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "photosFinishedLoading:" as Selector,
             name: Flickr.Notifications.PhotosLoadedForPin,
-            object: nil)
+            object: pin)
         
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "photoFinishedLoading:" as Selector,
@@ -149,7 +137,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
     func removeNotifications() {
         NSNotificationCenter.defaultCenter().removeObserver(self,
             name: Flickr.Notifications.PhotoLoaded,
-            object: nil)
+            object: pin)
         NSNotificationCenter.defaultCenter().removeObserver(self,
             name: Flickr.Notifications.PhotosLoadedForPin,
             object: nil)
@@ -228,7 +216,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
                 }
             }
         }
-        
         cell.urlTask = task
     }
 
@@ -238,7 +225,6 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
             photo.deleteImage()
         }
     }
-    
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         return CGSize(width: 110.0, height: 110.0)
@@ -254,8 +240,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
                 flickrCollectionView.deleteItemsAtIndexPaths([indexPath!])
             case .Insert :
                 let photo = anObject as! Photo
-            default :
-                return
+            default : ()
         }
     }
     
