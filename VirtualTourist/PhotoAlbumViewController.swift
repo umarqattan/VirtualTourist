@@ -122,6 +122,15 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         }
     }
     
+    /**
+        PROBLEM:  I was having trouble receiving notifications from
+                  individually loaded images where the download st-
+                  atus of the image was Flickr.Download.Status.Done.
+                  The problem was with the Notification name.
+        SOLUTION: Simply fix the name. It caused me hours of pain,
+                  unfortunately. 
+    **/
+    
     func addNotifications() {
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "photosFinishedLoading:" as Selector,
@@ -130,7 +139,7 @@ class PhotoAlbumViewController : UIViewController, UICollectionViewDataSource, U
         
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "photoFinishedLoading:" as Selector,
-            name: Flickr.Notifications.PhotosLoadedForPin,
+            name: Flickr.Notifications.PhotoLoadedForPin,
             object: nil)
     }
     
