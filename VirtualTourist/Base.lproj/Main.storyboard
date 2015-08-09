@@ -121,11 +121,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="BaO-gv-uFc" firstAttribute="leading" secondItem="hO3-rE-gXH" secondAttribute="leadingMargin" constant="-16" id="38c-wO-Fkg"/>
                             <constraint firstItem="BaO-gv-uFc" firstAttribute="leading" secondItem="xTJ-fx-bpC" secondAttribute="leading" id="6TY-D2-6pS"/>
                             <constraint firstAttribute="trailingMargin" secondItem="xTJ-fx-bpC" secondAttribute="trailing" constant="-16" id="PGC-aX-Z4L"/>
                             <constraint firstItem="BaO-gv-uFc" firstAttribute="bottom" secondItem="TcL-GH-Ekl" secondAttribute="top" id="QJc-Um-8FI"/>
                             <constraint firstItem="TcL-GH-Ekl" firstAttribute="top" secondItem="xTJ-fx-bpC" secondAttribute="bottom" id="WQU-ur-fiO"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="BaO-gv-uFc" secondAttribute="trailing" constant="-16" id="cAF-GS-LRY"/>
+                            <constraint firstItem="TcL-GH-Ekl" firstAttribute="top" secondItem="BaO-gv-uFc" secondAttribute="bottom" id="fpq-O6-lb3"/>
                             <constraint firstItem="xTJ-fx-bpC" firstAttribute="leading" secondItem="hO3-rE-gXH" secondAttribute="leadingMargin" constant="-16" id="h1B-Xj-3E6"/>
+                            <constraint firstItem="BaO-gv-uFc" firstAttribute="top" secondItem="hO3-rE-gXH" secondAttribute="topMargin" id="haU-b4-jeC"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
@@ -133,11 +137,15 @@
                                 <exclude reference="xTJ-fx-bpC"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="WQU-ur-fiO"/>
+                                <exclude reference="38c-wO-Fkg"/>
                                 <exclude reference="6TY-D2-6pS"/>
                                 <exclude reference="QJc-Um-8FI"/>
+                                <exclude reference="cAF-GS-LRY"/>
+                                <exclude reference="haU-b4-jeC"/>
                                 <exclude reference="PGC-aX-Z4L"/>
                                 <exclude reference="h1B-Xj-3E6"/>
+                                <exclude reference="WQU-ur-fiO"/>
+                                <exclude reference="fpq-O6-lb3"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -146,11 +154,15 @@
                                 <include reference="xTJ-fx-bpC"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="WQU-ur-fiO"/>
+                                <include reference="38c-wO-Fkg"/>
                                 <include reference="6TY-D2-6pS"/>
                                 <include reference="QJc-Um-8FI"/>
+                                <include reference="cAF-GS-LRY"/>
+                                <include reference="haU-b4-jeC"/>
                                 <include reference="PGC-aX-Z4L"/>
                                 <include reference="h1B-Xj-3E6"/>
+                                <include reference="WQU-ur-fiO"/>
+                                <include reference="fpq-O6-lb3"/>
                             </mask>
                         </variation>
                     </view>
